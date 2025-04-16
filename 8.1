@@ -1,0 +1,59 @@
+8.1 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login Page</title>
+</head>
+<body>
+<h2>User Login</h2>
+<form action="login" method="post">
+Username: <input type="text" name="username" required><br><br>
+Password: <input type="password" name="password" required><br><br>
+<input type="submit" value="Login">
+</form>
+</body>
+</html>
+LoginServlet.java — The Servlet
+package com.example;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+// Hardcoded valid credentials
+private static final String VALID_USERNAME = "admin";
+DEPARTMENT OF
+COMPUTER SCIENCE & ENGINEERING
+private static final String VALID_PASSWORD = "password123";
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, IOException {
+String username = request.getParameter("username");
+String password = request.getParameter("password");
+if (VALID_USERNAME.equals(username) && VALID_PASSWORD.equals(password)) {
+request.setAttribute("username", username);
+request.getRequestDispatcher("welcome.jsp").forward(request, response);
+} else {
+request.setAttribute("errorMessage", "Invalid username or password.");
+request.getRequestDispatcher("error.jsp").forward(request, response);
+}
+}
+}
+welcome.jsp — Welcome Message
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+<head><title>Welcome</title></head>
+<body>
+<h2>Welcome, <%= request.getAttribute("username") %>!</h2>
+<p>Login successful.</p>
+</body>
+</html>
+error.jsp — Invalid Login
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+<head><title>Login Failed</title></head>
+<body>
+<h3 style="color: red;"><%= request.getAttribute("errorMessage") %></h3>
+<a href="login.html">Try Again</a>
+</body>
+</html>
